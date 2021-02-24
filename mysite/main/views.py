@@ -1,28 +1,13 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages #for flash messages
-
-posts = [
-    {  #bookings
-
-'author':'Conor', #Student name
-'title': 'Booking 1', #Booking ID
-'content':'Spanish', #Subject
-'date_posted': 'August 27th 2020'#Date booked
-    },
-{
-'author':'Andrew', #Student name
-'title': 'Booking 2', #Booking ID
-'content':'Math', #Subject
-'date_posted': 'December 17th 2020'#Date booked
+from .forms import UserRegisterForm
+from .models import Booking
 
 
-}
-]
 def index(request):
     context = {
-        'posts':posts #dictionary
+        'posts':Booking.objects.all()#dictionary
     }
     return render (request,'main/home.html',context)
 
@@ -35,7 +20,7 @@ def v1(response):
 
 def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST) #If it recieves a post request it means an account is being created
+        form = UserRegisterForm(request.POST) #If it recieves a post request it means an account is being created
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username') #If the username follows the condition it is allowed
@@ -43,5 +28,5 @@ def register(request):
             return redirect('index')
 
     else:
-     form = UserCreationForm()
+     form = UserRegisterForm()
     return render(request,'main/register.html',{'form': form})
