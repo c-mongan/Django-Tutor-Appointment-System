@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib import messages #for flash messages
 from .forms import UserRegisterForm
 from .models import Booking
+from django.contrib.auth import authenticate, login 
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -24,9 +26,13 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username') #If the username follows the condition it is allowed
-            messages.success(request,f'Account created for {username}!') #f string ---> this line is flash message
-            return redirect('index')
+            messages.success(request,f'Account created for {username} Please log in!') #f string ---> this line is flash message
+            return redirect('login')
 
     else:
      form = UserRegisterForm()
     return render(request,'main/register.html',{'form': form})
+
+@login_required()
+def profile(request):
+    return render(request, 'main/profile.html')
