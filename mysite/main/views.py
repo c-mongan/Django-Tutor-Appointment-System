@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages #for flash messages
 from .forms import UserRegisterForm
@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin ,UserPassesTestMixin
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -23,6 +24,19 @@ class BookingListView(ListView):
     template_name = 'main/home.html'
     context_object_name = 'posts' #will be changed to booking
     ordering = ['-date_posted']
+    paginate_by = 5 #how many bookings per page
+
+class UserBookingListView(ListView):
+    model = Booking
+    template_name = 'main/mybookings.html'
+    context_object_name = 'posts' #will be changed to booking
+    paginate_by = 5 #how many bookings per page
+ 
+    def get_queryset(self):
+     user = get_object_or_404(User,username =self.kwargs.get('username'))
+     return Booking.objects.filter(author=user).order_by('-date_posted')
+
+
 
 class BookingDetailView(DetailView):
     model = Booking
