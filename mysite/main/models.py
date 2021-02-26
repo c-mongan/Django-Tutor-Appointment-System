@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
 class Booking(models.Model):
@@ -12,3 +13,8 @@ class Booking(models.Model):
 
  def __str__(self): #For declaring how we would like our bookings to be printed - by title
          return self.title
+
+
+ def get_absolute_url(self):
+  return reverse('booking-detail', kwargs={'pk': self.pk})
+
