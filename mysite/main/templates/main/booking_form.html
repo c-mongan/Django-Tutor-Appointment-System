@@ -1,5 +1,9 @@
 {% extends "main/base.html" %}
 {% load crispy_forms_tags %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
 {% block content %}
 <div class="content-section">
         <form method="POST">

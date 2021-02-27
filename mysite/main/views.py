@@ -9,6 +9,8 @@ from django.views.generic import ListView,DetailView,CreateView,UpdateView,Delet
 from django.contrib.auth.mixins import LoginRequiredMixin ,UserPassesTestMixin
 from django.contrib.auth.models import User
 
+from bootstrap_datepicker_plus import DateTimePickerInput
+
 
 def index(request):
     context = {
@@ -43,18 +45,23 @@ class BookingDetailView(DetailView):
 
 class BookingCreateView(LoginRequiredMixin,CreateView):
     model = Booking
-    fields = ['title','content']
+    fields = ['title','content', 'details','datetime']
     
     def form_valid(self,form):
+
      form.instance.author = self.request.user #set booking creator as current logged in user
+     form.fields['datetime'].widget = DateTimePickerInput()
      return super().form_valid(form)
+
+    
  
 class BookingUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Booking
-    fields = ['title','content']
+    fields = ['title','content','details','datetime']
     
     def form_valid(self,form):
      form.instance.author = self.request.user #set booking creator as current logged in user
+     form.fields['datetime'].widget = DateTimePickerInput()
      return super().form_valid(form)
 
     def test_func(self): #users cant edit other users bookings (NEEDS TO BE TESTED)
@@ -74,8 +81,6 @@ class BookingDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         return False
     
    
-def v1(response):
-  return HttpResponse("View 1")
 
 def register(request):
     if request.method == "POST":
