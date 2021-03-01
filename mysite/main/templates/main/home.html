@@ -1,14 +1,14 @@
 {% extends "main/base.html" %}
 {% block content %}
-    {% for post in posts %}
+    {% for booking in bookings %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{% url 'mybookings' post.author.username %}">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted | date:"F d, Y" }}</small>
+              <a class="mr-2" href="{% url 'mybookings' booking.student.username %}">{{ booking.student }}</a>
+              <small class="text-muted">{{ booking.date_posted | date:"F d, Y" }}</small>
             </div>
-            <h2><a class="article-title" href="{% url 'booking-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.datetime }}</p>
+            <h2><a class="article-title" href="{% url 'booking-detail' booking.id %}">{{ booking.subject }}</a></h2>
+            <p class="article-content">{{ booking.datetime }}</p>
           </div>
         </article>
     {% endfor %}

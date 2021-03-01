@@ -4,18 +4,20 @@
   <article class="media content-section">
          <div class="media-body">
           <div class="article-metadata">
-              <a class="mr-2" href="{% url 'mybookings' object.author.username %}">{{ object.author }}</a>
+              <a class="mr-2" href="{% url 'mybookings' object.student.username %}">{{ object.student }}</a>
               <small class="text-muted">{{ object.date_posted | date:"F d, Y" }}</small>
-              {%if object.author == user %}
+              {%if object.student == user %}
                 </div>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'booking-update' object.id %}">Update</a> 
                 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'booking-delete' object.id %}">Delete</a>
                 </div> 
               {% endif %}
             </div>
-            <h2 class="article-title">{{ object.title }}</h2>
-            <p class="article-content">{{ object.datetime }}</p>
-            <p class="article-content">{{ object.content }}</p>
+            <h2 class="article-title">{{ object.subject }}</h2>
+            <p class="article-content">Booked for : {{ object.datetime }}</p>
+            <p class="article-content">Teacher : {{ object.teacher }}</p>
+            <p class="article-content">{{ object.details }}</p>
+            <p class="article-content">Was booked on : {{ object.date_posted }}</p>
           </div>
         </article>
 {% endblock content %}

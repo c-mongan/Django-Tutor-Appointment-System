@@ -14,7 +14,7 @@ from bootstrap_datepicker_plus import DateTimePickerInput
 
 def index(request):
     context = {
-        'posts':Booking.objects.all()# will be changed to booking
+        'bookings':Booking.objects.all()
     }
     return render (request,'main/home.html',context)
 
@@ -24,19 +24,19 @@ def about(request):
 class BookingListView(ListView):
     model = Booking
     template_name = 'main/home.html'
-    context_object_name = 'posts' #will be changed to booking
+    context_object_name = 'bookings' 
     ordering = ['-date_posted']
-    paginate_by = 5 #how many bookings per page
+    paginate_by = 3 #how many bookings per page
 
 class UserBookingListView(ListView):
     model = Booking
     template_name = 'main/mybookings.html'
-    context_object_name = 'posts' #will be changed to booking
-    paginate_by = 5 #how many bookings per page
+    context_object_name = 'bookings'
+    paginate_by = 3 #how many bookings per page
  
     def get_queryset(self):
      user = get_object_or_404(User,username =self.kwargs.get('username'))
-     return Booking.objects.filter(author=user).order_by('-date_posted')
+     return Booking.objects.filter(student=user).order_by('-date_posted')
 
 
 
@@ -45,11 +45,11 @@ class BookingDetailView(DetailView):
 
 class BookingCreateView(LoginRequiredMixin,CreateView):
     model = Booking
-    fields = ['title','content', 'details','datetime']
+    fields = ['subject','teacher', 'details','datetime']
     
     def form_valid(self,form):
 
-     form.instance.author = self.request.user #set booking creator as current logged in user
+     form.instance.student = self.request.user #set booking creator as current logged in user
      form.fields['datetime'].widget = DateTimePickerInput()
      return super().form_valid(form)
 
@@ -57,16 +57,16 @@ class BookingCreateView(LoginRequiredMixin,CreateView):
  
 class BookingUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Booking
-    fields = ['title','content','details','datetime']
+    fields = ['subject','teacher','details','datetime']
     
     def form_valid(self,form):
-     form.instance.author = self.request.user #set booking creator as current logged in user
+     form.instance.student = self.request.user #set booking creator as current logged in user
      form.fields['datetime'].widget = DateTimePickerInput()
      return super().form_valid(form)
 
     def test_func(self): #users cant edit other users bookings (NEEDS TO BE TESTED)
-        post=self.get_object()
-        if self.request.user == post.author:
+        booking=self.get_object()
+        if self.request.user == booking.student:
             return True
         return False
  
@@ -75,8 +75,8 @@ class BookingDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     success_url = '/'
     
     def test_func(self): #users cant delete other users bookings (NEEDS TO BE TESTED)
-        post=self.get_object()
-        if self.request.user == post.author:
+        booking=self.get_object()
+        if self.request.user == booking.student:
             return True
         return False
     

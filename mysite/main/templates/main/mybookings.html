@@ -1,15 +1,15 @@
 {% extends "main/base.html" %}
 {% block content %}
    <h1 class = "mb-3">Bookings by {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
-    {% for post in posts %}
+    {% for booking in bookings %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{% url 'mybookings' post.author.username %}">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted | date:"F d, Y" }}</small>
+              <a class="mr-2" href="{% url 'mybookings' booking.student.username %}">{{ booking.student }}</a>
+              <small class="text-muted">{{ booking.date_posted | date:"F d, Y" }}</small>
             </div>
-            <h2><a class="article-title" href="{% url 'booking-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
+            <h2><a class="article-title" href="{% url 'booking-detail' booking.id %}">{{ booking.title }}</a></h2>
+            <p class="article-content">{{ booking.teacher }}</p>
           </div>
         </article>
     {% endfor %}
