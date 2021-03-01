@@ -129,4 +129,4 @@ LOGIN_URL = 'login'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-
+TIME_INPUT_FORMATS = ['%I:%M %p']

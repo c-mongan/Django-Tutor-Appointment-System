@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages #for flash messages
 from .forms import UserRegisterForm
-from .models import Booking
+from .models import Booking, aTeacher
 from django.contrib.auth import authenticate, login 
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
@@ -45,12 +45,12 @@ class BookingDetailView(DetailView):
 
 class BookingCreateView(LoginRequiredMixin,CreateView):
     model = Booking
-    fields = ['subject','teacher', 'details','datetime']
+    fields = ['subject','teacher', 'details','datetime',]
     
     def form_valid(self,form):
 
      form.instance.student = self.request.user #set booking creator as current logged in user
-     form.fields['datetime'].widget = DateTimePickerInput()
+     form.fields['datetime'].widget = DateTimePickerInput(0)
      return super().form_valid(form)
 
     
